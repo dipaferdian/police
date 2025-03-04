@@ -1,0 +1,12 @@
+<div id="<%= dom_id officer %>">
+  <p>
+    <strong>Name:</strong>
+    <label><%= officer.name %></label>
+  </p>
+
+  <p>
+    <strong>Rank:</strong>
+    <%= officer.rank.try(:name) %>
+  </p>
+
+</div>
