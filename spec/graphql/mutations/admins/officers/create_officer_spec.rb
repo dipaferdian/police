@@ -7,7 +7,7 @@ RSpec.describe 'CreateOfficer', type: :request do
   let(:user) { create(:user, is_admin: true) }
   let(:rank) { create(:rank) }
 
-  context 'Create officers' do
+  describe 'Create officers' do
 
     def officer_data_type(object = {})
       ({
@@ -18,7 +18,6 @@ RSpec.describe 'CreateOfficer', type: :request do
     end
 
     it 'should return new officer' do
-
       variables = {
         input: {
           name: Faker::Name.name,
@@ -60,7 +59,6 @@ RSpec.describe 'CreateOfficer', type: :request do
     end
 
     it 'should fail to create when unauthenticated' do
-
       variables = {
         input: {
           name: Faker::Name.name,

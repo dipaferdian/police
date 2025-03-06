@@ -3,7 +3,8 @@
 require 'rails_helper'
 
 RSpec.describe 'GetOfficer', type: :request do
-  context 'Get officers' do
+
+  describe 'Get officers' do
     let(:user) { create(:user, is_admin: true) }
     let!(:rank) { create(:rank) }
     let!(:officers) { create_list(:officer, 5, rank: rank) }

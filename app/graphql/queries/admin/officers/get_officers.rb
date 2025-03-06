@@ -9,10 +9,10 @@ module Queries
         def resolve(page:)
           authenticate_admin!
 
-          query = Officer.left_joins(:rank).order(:id).paginate(page: page, per_page: 2)
+          officers = Officer.left_joins(:rank).order(:id).paginate(page: page, per_page: 10)
 
           {
-            officers: query
+            officers: officers
           }
         end
       end

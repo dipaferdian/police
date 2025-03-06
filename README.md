@@ -18,3 +18,5 @@ bundle exec rdbg --open -n -c -- bundle exec rails s -p [port] -b [ip]
 # How to run test
  - Run `rspec` in terminal
 
+# Entity Relationship Diagram
+[Diagram.io](https://drive.google.com/file/d/1RruRSZWxAaBvAXzzNE1Mmgf4bEBCoWMO/view?usp=sharing)
