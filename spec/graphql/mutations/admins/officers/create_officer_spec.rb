@@ -102,5 +102,3 @@ RSpec.describe 'CreateOfficer', type: :request do
     GRAPHQL
   end
 end
-
-

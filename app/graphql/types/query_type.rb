@@ -6,21 +6,6 @@ module Types
 
     # Add root-level fields here.
     # They will be entry points for queries on your schema.
-
-    field :officers, [Types::OfficerType], 'Get Officer by page params' do
-      argument :page, Integer
-    end
-
-    # field :ranks, [Types::Rank::RankType]
-
-    def officers(page:)
-
-      if page <= 0
-        return []
-      end
-
-      Officer.left_joins(:rank).paginate_by_sql(['select officers.id, officers.name from officers order by id asc'], :page => page, :per_page => 2)
-    end
-
+    field :get_officers, resolver: Queries::Admin::Officers::GetOfficers
   end
 end
