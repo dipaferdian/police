@@ -4,10 +4,8 @@ Rails.application.routes.draw do
   end
   post "/graphql", to: "graphql#execute"
 
-  resources :ranks
-  resources :officers
   # Define your application routes per the DSL in https://guides.rubyonrails.org/routing.html
 
   # Defines the root path route ("/")
-  # root "articles#index"
+  root "application#index"
 end
