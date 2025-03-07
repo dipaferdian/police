@@ -3,7 +3,7 @@
 module Mutations
   module Admin
     module Officers
-      class CreateOfficer < BaseMutation
+      class CreateOfficers < BaseMutation
         field :officer, Types::OfficerType, null: false
         
         argument :name, String, required: true

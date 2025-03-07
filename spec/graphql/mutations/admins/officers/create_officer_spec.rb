@@ -45,15 +45,15 @@ RSpec.describe 'CreateOfficer', type: :request do
 
       expect(response).to have_http_status(200)
       expect(response.request.method).to eq("POST")
-      expect(response.parsed_body["data"]["createOfficer"]).to include("officer" => officer_data_type({
+      expect(response.parsed_body["data"]["createOfficers"]).to include("officer" => officer_data_type({
         "name" => variables[:input][:name],
         "rank" => include({
           "id" => rank.id,
           "name" => rank.name
         })
       }))
-      expect(RankOfficer.where(officer: response.parsed_body["data"]["createOfficer"]["officer"]["id"], rank: rank).count).to eq(1)
-      expect(response.parsed_body["data"]["createOfficer"]).to include("errors" => be_nil)
+      expect(RankOfficer.where(officer: response.parsed_body["data"]["createOfficers"]["officer"]["id"], rank: rank).count).to eq(1)
+      expect(response.parsed_body["data"]["createOfficers"]).to include("errors" => be_nil)
     end
 
     it 'should reuturn rank not found' do
@@ -68,7 +68,7 @@ RSpec.describe 'CreateOfficer', type: :request do
   
       expect(response).to have_http_status(200)
       expect(response.request.method).to eq("POST")
-      expect(response.parsed_body["data"]["createOfficer"]).to be_nil
+      expect(response.parsed_body["data"]["createOfficers"]).to be_nil
       expect(response.parsed_body["errors"]).to include(error_data_type({"message" => "Rank not found"}))
     end
 
@@ -84,7 +84,7 @@ RSpec.describe 'CreateOfficer', type: :request do
   
       expect(response).to have_http_status(200)
       expect(response.request.method).to eq("POST")
-      expect(response.parsed_body["data"]["createOfficer"]).to be_nil
+      expect(response.parsed_body["data"]["createOfficers"]).to be_nil
       expect(response.parsed_body["errors"]).to include(error_data_type({"message" => "Failed to create officer"}))
     end
 
@@ -100,7 +100,7 @@ RSpec.describe 'CreateOfficer', type: :request do
     
       expect(response).to have_http_status(200)
       expect(response.request.method).to eq("POST")
-      expect(response.parsed_body["data"]["createOfficer"]).to be_nil
+      expect(response.parsed_body["data"]["createOfficers"]).to be_nil
       expect(response.parsed_body["errors"]).to include(error_data_type({"message" => "You are not authorized"}))
     end
   end
@@ -109,8 +109,8 @@ RSpec.describe 'CreateOfficer', type: :request do
 
   def query
     <<~GRAPHQL
-    mutation createOfficer($input: CreateOfficerInput!){
-      createOfficer(input: $input){
+    mutation createOfficers($input: CreateOfficersInput!){
+      createOfficers(input: $input){
         officer{
           id
           name
