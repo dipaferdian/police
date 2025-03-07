@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.0].define(version: 2025_03_07_022200) do
+ActiveRecord::Schema[7.0].define(version: 2025_03_07_092213) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
 
@@ -30,6 +30,14 @@ ActiveRecord::Schema[7.0].define(version: 2025_03_07_022200) do
     t.string "province"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+  end
+
+  create_table "profiles", force: :cascade do |t|
+    t.bigint "officer_id", null: false
+    t.string "status", null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["officer_id"], name: "index_profiles_on_officer_id"
   end
 
   create_table "rank_officers", force: :cascade do |t|
@@ -67,6 +75,7 @@ ActiveRecord::Schema[7.0].define(version: 2025_03_07_022200) do
 
   add_foreign_key "officers", "offices"
   add_foreign_key "officers", "vehicles"
+  add_foreign_key "profiles", "officers"
   add_foreign_key "rank_officers", "officers"
   add_foreign_key "rank_officers", "ranks"
 end

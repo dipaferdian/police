@@ -7,7 +7,11 @@ RSpec.describe 'GetOfficer', type: :request do
   describe 'Get officers' do
     let(:user) { create(:user, is_admin: true) }
     let!(:rank) { create(:rank) }
-    let!(:officers) { create_list(:officer, 5, rank: rank) }
+    let!(:officers) { 
+      5.times do |time|
+         create(:officer).ranks << rank
+      end
+     }
 
     def rank_data_type(object = {})
       include({
@@ -20,7 +24,10 @@ RSpec.describe 'GetOfficer', type: :request do
       include({
                 "id" => be_a(Integer),
                 "name" => be_a(String),
-                "rank" => rank_data_type
+                "ranks" => rank_data_type({
+                    "id" => rank.id,
+                    "name" => rank.name
+                })
               }.merge(object))
     end
 
@@ -51,7 +58,9 @@ RSpec.describe 'GetOfficer', type: :request do
     end
 
     it 'should return officers search by name' do
-      officers = create_list(:officer, 10, rank: rank)
+      officers = create_list(:officer, 10) do |officer|
+                    officer.ranks << rank
+                end
 
       variables = { 
         input: {
@@ -68,11 +77,7 @@ RSpec.describe 'GetOfficer', type: :request do
       expect(response.request.method).to eq("POST")
       expect(response.parsed_body["data"]["getOfficers"]).to include("officers" => officer_data_type({
         "id"   => officers.first.id,
-        "name" => officers.first.name,
-        "rank" => {
-          "id" => rank.id,
-          "name" => rank.name
-        }
+        "name" => officers.first.name
       }))
       expect(response.parsed_body["data"]["getOfficers"]["officers"].length).to eq(1)
       expect(response.parsed_body["data"]["errors"]).to be_nil
@@ -107,7 +112,7 @@ RSpec.describe 'GetOfficer', type: :request do
           officers {
             id
             name
-            rank {
+            ranks{
               id
               name
             }

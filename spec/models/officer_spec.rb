@@ -33,19 +33,19 @@ RSpec.describe Officer, type: :model do
       Officer.find(officer.id)
     end
 
-    it 'has_one Rank through RankOfficer' do
-      t = Officer.reflect_on_association(:rank)
-      expect(t.macro).to eq(:has_one)
+    it 'has_many Rank through RankOfficer' do
+      t = Officer.reflect_on_association(:ranks)
+      expect(t.macro).to eq(:has_many)
     end
 
-    it 'has_one RankOfficer' do
-      t = Officer.reflect_on_association(:rank_officer)
-      expect(t.macro).to eq(:has_one)
+    it 'has_many RankOfficer' do
+      t = Officer.reflect_on_association(:rank_officers)
+      expect(t.macro).to eq(:has_many)
     end
 
     it 'should officer have a rank' do
-      expect(get_officer.rank).to rank_type_data
-      expect(get_officer.rank).to have_attributes(name: "Anggota")
+      expect(get_officer.ranks).to include(rank_type_data)
+      expect(get_officer.ranks).to include(rank_type_data({name: "Anggota"}))
     end
 
     it { should belong_to(:vehicle).optional(true) }
