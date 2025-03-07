@@ -12,16 +12,12 @@ module Mutations
         def resolve(name:, rank_id:)
           authenticate_admin!
           
-          officer = Officer.new(name: name)
-  
+          rank = Rank.find_by(id: rank_id)
+          return respond_single_error("Rank not found") unless rank
+
+          officer = Officer.new(name: name, rank: rank)
           return respond_single_error("Failed to create officer") unless officer.save
-  
-            rank = Rank.find_by(id: rank_id)
-  
-            if rank.present?
-              RankOfficer.create(officer: officer, rank: rank)
-            end
-  
+    
             {
               officer: officer
             }

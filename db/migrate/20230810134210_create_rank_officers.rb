@@ -6,4 +6,8 @@ class CreateRankOfficers < ActiveRecord::Migration[7.0]
     end
     add_reference :rank_officers, :officer, null: false, foreign_key: true
   end
+
+  def down
+    drop_table :rank_officers
+  end
 end

@@ -8,4 +8,5 @@ class Officer < ApplicationRecord
 
   validates :name, uniqueness: true, presence: true, length: { maximum: 255 }
   validates :vehicle, uniqueness: true, allow_nil: true
+  validates_associated :rank
 end

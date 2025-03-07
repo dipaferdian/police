@@ -24,10 +24,19 @@ RSpec.describe 'GetOfficer', type: :request do
               }.merge(object))
     end
 
+    def error_data_type(object = {})
+      include({
+        "message" => be_a(String),
+        "locations" => be_a(Array),
+        "path" => be_a(Array)
+      }.merge(object))
+    end
+
     it 'should return officers with rank relation' do
       variables = { 
         input: {
-          page: 1
+          page: 1,
+          name: nil
         }
       }
 
@@ -38,6 +47,34 @@ RSpec.describe 'GetOfficer', type: :request do
       expect(response).to have_http_status(200)
       expect(response.request.method).to eq("POST")
       expect(response.parsed_body["data"]["getOfficers"]).to include("officers" => officer_data_type)
+      expect(response.parsed_body["data"]["errors"]).to be_nil
+    end
+
+    it 'should return officers search by name' do
+      officers = create_list(:officer, 10, rank: rank)
+
+      variables = { 
+        input: {
+          page: 1,
+          name: officers.first.name
+        }
+      }
+
+      post '/graphql',
+      params: { query: query, variables: variables }.to_json, # Convert params to JSON
+      headers: header(user).merge!({ 'Content-Type' => 'application/json' }) # Set JSON headers
+
+      expect(response).to have_http_status(200)
+      expect(response.request.method).to eq("POST")
+      expect(response.parsed_body["data"]["getOfficers"]).to include("officers" => officer_data_type({
+        "id"   => officers.first.id,
+        "name" => officers.first.name,
+        "rank" => {
+          "id" => rank.id,
+          "name" => rank.name
+        }
+      }))
+      expect(response.parsed_body["data"]["getOfficers"]["officers"].length).to eq(1)
       expect(response.parsed_body["data"]["errors"]).to be_nil
     end
 
@@ -57,9 +94,7 @@ RSpec.describe 'GetOfficer', type: :request do
       expect(response).to have_http_status(200)
       expect(response.request.method).to eq("POST")
       expect(response.parsed_body["data"]["getOfficers"]).to be_nil
-      expect(response.parsed_body["errors"]).to all(include(
-        "message" => "You are not authorized"
-      ))  
+      expect(response.parsed_body["errors"]).to include(error_data_type({ "message" => "You are not authorized"}))
     end
   end
 
