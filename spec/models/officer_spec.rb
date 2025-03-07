@@ -86,4 +86,8 @@ RSpec.describe Officer, type: :model do
       end
     end
   end
+
+  describe 'save_officers' do
+    
+  end
 end

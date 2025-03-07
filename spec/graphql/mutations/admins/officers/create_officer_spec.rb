@@ -9,7 +9,6 @@ RSpec.describe 'CreateOfficer', type: :request do
 
   describe 'Create officers' do
 
-    
     def rank_data_type(object = {})
       include({
                 "id" => be_a(Integer),
@@ -36,10 +35,13 @@ RSpec.describe 'CreateOfficer', type: :request do
       }.merge(object))
     end
 
-    it 'should return new officer' do
+    it 'should return new multiple officer' do
       variables = {
         input: {
-          name: Faker::Name.name,
+          names: [
+            Faker::Name.name,
+            Faker::Name.name
+          ],
           rankId: rank.id
         }
       }
@@ -48,17 +50,36 @@ RSpec.describe 'CreateOfficer', type: :request do
 
       expect(response).to have_http_status(200)
       expect(response.request.method).to eq("POST")
-      expect(response.parsed_body["data"]["createOfficers"]).to include("officer" => officer_data_type({
-        "name" => variables[:input][:name]
-      }))
-      # expect(RankOfficer.where(officer: response.parsed_body["data"]["createOfficers"]["officer"]["id"], rank: rank).count).to eq(1)
+      expect(response.parsed_body["data"]["createOfficers"]).to include("officers" => all(officer_data_type({
+        "name" => be_in(variables[:input][:names])
+      })))
+      expect(response.parsed_body["data"]["createOfficers"]["officers"].length).to eq(2)
+      expect(response.parsed_body["data"]["createOfficers"]).to include("errors" => be_nil)
+    end
+
+    it 'should return new officer' do
+      variables = {
+        input: {
+          names: [Faker::Name.name],
+          rankId: rank.id
+        }
+      }
+
+      post '/graphql', params: { query: query, variables: variables }, headers: header(user)
+
+      expect(response).to have_http_status(200)
+      expect(response.request.method).to eq("POST")
+      expect(response.parsed_body["data"]["createOfficers"]).to include("officers" => all(officer_data_type({
+        "name" => be_in(variables[:input][:names])
+      })))
+      expect(response.parsed_body["data"]["createOfficers"]["officers"].length).to eq(1)
       expect(response.parsed_body["data"]["createOfficers"]).to include("errors" => be_nil)
     end
 
     it 'should reuturn rank not found' do
       variables = {
         input: {
-          name: Faker::Name.name,
+          names: [Faker::Name.name],
           rankId: ""
         }
       }
@@ -74,7 +95,7 @@ RSpec.describe 'CreateOfficer', type: :request do
     it 'should fail to create new officer when name is empty value' do
       variables = {
         input: {
-          name: "",
+          names: [""],
           rankId: rank.id
         }
       }
@@ -84,13 +105,13 @@ RSpec.describe 'CreateOfficer', type: :request do
       expect(response).to have_http_status(200)
       expect(response.request.method).to eq("POST")
       expect(response.parsed_body["data"]["createOfficers"]).to be_nil
-      expect(response.parsed_body["errors"]).to include(error_data_type({"message" => "Failed to create officer"}))
+      expect(response.parsed_body["errors"]).to include(error_data_type({"message" => "Failed to create officers"}))
     end
 
     it 'should fail to create when unauthenticated' do
       variables = {
         input: {
-          name: Faker::Name.name,
+          names: [Faker::Name.name],
           rankId: rank.id
         }
       }
@@ -110,7 +131,7 @@ RSpec.describe 'CreateOfficer', type: :request do
     <<~GRAPHQL
     mutation createOfficers($input: CreateOfficersInput!){
       createOfficers(input: $input){
-        officer{
+        officers{
           id
           name
           ranks{
