@@ -18,16 +18,23 @@ RSpec.describe Officer, type: :model do
     create(:officer, vehicle: vehicle, office: office)
   end
 
-  describe "association" do
+  def rank_type_data(object = {})
+    have_attributes({
+              id: be_a(Integer),
+              name: be_a(String),
+              created_at: be_a(ActiveSupport::TimeWithZone),
+              updated_at: be_a(ActiveSupport::TimeWithZone)
+            }.merge(object))
+  end
 
-    def rank_type_data(object = {})
-      have_attributes({
-                id: be_a(Integer),
-                name: be_a(String),
-                created_at: be_a(ActiveSupport::TimeWithZone),
-                updated_at: be_a(ActiveSupport::TimeWithZone)
-              }.merge(object))
-    end
+  def officer_data_type(object = {})
+    have_attributes({
+              "id" => be_a(Integer),
+              "name" => be_a(String)
+            }.merge(object))
+  end
+
+  describe "association" do
 
     def get_officer
       Officer.find(officer.id)
@@ -88,6 +95,24 @@ RSpec.describe Officer, type: :model do
   end
 
   describe 'save_officers' do
-    
+    let(:rank) {create(:rank)}
+
+    it 'should return create new multiple officers' do 
+      payloads = [{
+        name: Faker::Name.name,
+        rank_id: rank.id
+      },
+      {
+        name: Faker::Name.name,
+        rank_id: rank.id
+      }
+    ]
+  
+    result = Officer.save_officers(datas: payloads)
+
+    expect(result).to include(officer_data_type({
+      "name" => be_in(payloads.map { |item| item[:name] })
+    }))
+    end
   end
 end

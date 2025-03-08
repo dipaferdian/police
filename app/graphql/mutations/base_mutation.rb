@@ -30,6 +30,12 @@ module Mutations
       raise GraphQL::ExecutionError, detail
     end
 
+    def check_errors(datas:)
+      if datas.any? { |data| data[:errors] }
+        return respond_single_error(datas[0][:errors]) 
+      end
+    end
+
     private
     def construct_error_messages(resource)
       resource.errors.messages.map do |field, _message|

@@ -53,8 +53,8 @@ RSpec.describe 'GetOfficer', type: :request do
 
       expect(response).to have_http_status(200)
       expect(response.request.method).to eq("POST")
-      expect(response.parsed_body["data"]["getOfficers"]).to include("officers" => officer_data_type)
       expect(response.parsed_body["data"]["errors"]).to be_nil
+      expect(response.parsed_body["data"]["getOfficers"]).to include("officers" => officer_data_type)
     end
 
     it 'should return officers search by name' do
@@ -75,12 +75,12 @@ RSpec.describe 'GetOfficer', type: :request do
 
       expect(response).to have_http_status(200)
       expect(response.request.method).to eq("POST")
+      expect(response.parsed_body["data"]["errors"]).to be_nil
       expect(response.parsed_body["data"]["getOfficers"]).to include("officers" => officer_data_type({
         "id"   => officers.first.id,
         "name" => officers.first.name
       }))
       expect(response.parsed_body["data"]["getOfficers"]["officers"].length).to eq(1)
-      expect(response.parsed_body["data"]["errors"]).to be_nil
     end
 
     it 'should return unauthorized when user is not admin' do
