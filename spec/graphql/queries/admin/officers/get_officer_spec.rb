@@ -98,8 +98,8 @@ RSpec.describe 'GetOfficer', type: :request do
 
       expect(response).to have_http_status(200)
       expect(response.request.method).to eq("POST")
-      expect(response.parsed_body["data"]["getOfficers"]).to be_nil
       expect(response.parsed_body["errors"]).to include(error_data_type({ "message" => "You are not authorized"}))
+      expect(response.parsed_body["data"]["getOfficers"]).to be_nil
     end
   end
 

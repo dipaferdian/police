@@ -114,5 +114,39 @@ RSpec.describe Officer, type: :model do
       "name" => be_in(payloads.map { |item| item[:name] })
     }))
     end
+
+    it 'should return errors with name is invalid' do 
+      payloads = [{
+        name: '',
+        rank_id: rank.id
+      },
+      {
+        name: '',
+        rank_id: rank.id
+      }
+    ]
+  
+    result = Officer.save_officers(datas: payloads)
+
+    expect(result).to include("errors" => be_present)
+    expect(result).to include("errors" => "Name can't be blank")
+    end
+
+    it 'should return errors with rank is not found' do 
+      payloads = [{
+        name: Faker::Name.name,
+        rank_id: 0
+      },
+      {
+        name: Faker::Name.name,
+        rank_id: -1
+      }
+    ]
+  
+    result = Officer.save_officers(datas: payloads)
+
+    expect(result).to include("errors" => be_present)
+    expect(result).to include("errors" => "Rank 0 not found")
+    end
   end
 end

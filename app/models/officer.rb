@@ -22,7 +22,7 @@ class Officer < ApplicationRecord
 
         unless rank
           new_officers = [
-            errors: "Rank #{rank_id} not found"
+            "errors" => "Rank #{rank_id} not found"
           ]
           raise ActiveRecord::Rollback, "Rank #{rank_id} not found"
         end
@@ -32,7 +32,7 @@ class Officer < ApplicationRecord
           officer
         else
           new_officers = [
-            errors: "#{officer.errors.full_messages.join(', ')}"
+            "errors" => "#{officer.errors.full_messages.join(', ')}"
           ]
           raise ActiveRecord::Rollback, "Failed to create officer: #{officer.errors.full_messages.join(', ')}"
         end
