@@ -1,7 +1,7 @@
 module Queries
   module Admin
     module Officers
-      class GetOfficers < Queries::BaseQueries
+      class GetOfficers < BaseQueriesMutation
         field :officers, [Types::OfficerType], null: false
 
         argument :page, Integer, required: true

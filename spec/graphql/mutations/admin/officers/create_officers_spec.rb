@@ -2,7 +2,7 @@
 
 require 'rails_helper'
 
-RSpec.describe 'CreateOfficer', type: :request do
+RSpec.describe 'CreateOfficers', type: :request do
 
   let(:user) { create(:user, is_admin: true) }
   let!(:rank) { create(:rank) }

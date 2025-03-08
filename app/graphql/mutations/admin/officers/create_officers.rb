@@ -3,7 +3,7 @@
 module Mutations
   module Admin
     module Officers
-      class CreateOfficers < BaseMutation
+      class CreateOfficers < BaseQueriesMutation
         field :officers, [Types::OfficerType], null: false
         
         argument :officers, [CreateOfficersInputType], required: true
