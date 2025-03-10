@@ -32,7 +32,7 @@ RSpec.describe 'LoginAuthentications', type: :request do
       token = ::JwtService.decode(response.parsed_body["data"]["loginAuthentications"]["jwt"]["token"])
       expect(response).to have_http_status(200)
       expect(response.request.method).to eq("POST")
-      expect(response.parsed_body["data"]["loginAuthentications"]).to include("errors" => be_nil)
+      expect(response.parsed_body["errors"]).to be_nil
       expect(response.parsed_body["data"]["loginAuthentications"]).to include({
         "jwt" => be_present
       })

@@ -6,6 +6,11 @@ module Types
 
     # Add root-level fields here.
     # They will be entry points for queries on your schema.
-    field :get_officers, resolver: Queries::Admin::Officers::GetOfficers, description: 'search officers'
+    
+    # Officers
+    field :get_officers, resolver: Queries::Admin::Officers::GetOfficers, description: 'get officers'
+
+    # Ranks
+    field :get_ranks, resolver: Queries::Admin::Ranks::GetRanks, description: 'get ranks'
   end
 end

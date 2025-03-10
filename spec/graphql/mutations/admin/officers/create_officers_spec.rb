@@ -55,7 +55,7 @@ RSpec.describe 'CreateOfficers', type: :request do
 
       expect(response).to have_http_status(200)
       expect(response.request.method).to eq("POST")
-      expect(response.parsed_body["data"]["createOfficers"]).to include("errors" => be_nil)
+      expect(response.parsed_body["errors"]).to be_nil
       expect(response.parsed_body["data"]["createOfficers"]).to include("officers" => all(officer_data_type({
         "name" => be_in(variables[:input][:officers].map { |item| item[:name] })
       })))
