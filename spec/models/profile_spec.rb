@@ -5,7 +5,7 @@ RSpec.describe Profile, type: :model do
   let!(:officer) { create(:officer) }
 
   describe 'associations' do
-    it { should have_one(:officer) }
+    it { should belong_to(:officer) }
   end
 
   describe 'validations' do

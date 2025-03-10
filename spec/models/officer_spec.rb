@@ -57,7 +57,7 @@ RSpec.describe Officer, type: :model do
 
     it { should belong_to(:vehicle).optional(true) }
 
-    it { should belong_to(:profile).optional(true) }
+    it { should have_one(:profile) }
 
     it 'should officer have vehicle' do
       expect(officer.vehicle).to be_present

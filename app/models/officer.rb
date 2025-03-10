@@ -4,7 +4,7 @@ class Officer < ApplicationRecord
   has_many :ranks, through: :rank_officers
   belongs_to :office, optional: true
   belongs_to :vehicle, optional: true
-  belongs_to :profile, optional: true
+  has_one    :profile
 
   validates :name, uniqueness: true, presence: true, length: { maximum: 255 }
   validates :vehicle, uniqueness: true, allow_nil: true
@@ -50,11 +50,7 @@ class Officer < ApplicationRecord
 
   def set_profile
     unless self.profile.present?
-      new_profile = Profile.create_profile(officer: self)
-      if new_profile
-        self.profile = new_profile
-        self.save
-      end
+      create_profile(status: "good")
     end
   end
 end
