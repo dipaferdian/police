@@ -4,10 +4,13 @@ class Officer < ApplicationRecord
   has_many :ranks, through: :rank_officers
   belongs_to :office, optional: true
   belongs_to :vehicle, optional: true
+  belongs_to :profile, optional: true
 
   validates :name, uniqueness: true, presence: true, length: { maximum: 255 }
   validates :vehicle, uniqueness: true, allow_nil: true
   validates_associated :ranks
+
+  after_save :set_profile
 
   def self.save_officers(datas:)
 
@@ -40,5 +43,18 @@ class Officer < ApplicationRecord
     end
 
     new_officers
+  end
+
+
+  private
+
+  def set_profile
+    unless self.profile.present?
+      new_profile = Profile.create_profile(officer: self)
+      if new_profile
+        self.profile = new_profile
+        self.save
+      end
+    end
   end
 end

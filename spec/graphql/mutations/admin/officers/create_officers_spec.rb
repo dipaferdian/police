@@ -23,7 +23,15 @@ RSpec.describe 'CreateOfficers', type: :request do
                 "ranks" => rank_data_type({
                   "id" => rank.id,
                   "name" => rank.name
-                })
+                }),
+                "profile" => profile_data_type
+              }.merge(object))
+    end
+
+    def profile_data_type(object = {})
+      include({
+                "id" => be_a(Integer),
+                "status" => be_a(String)
               }.merge(object))
     end
 
@@ -147,6 +155,10 @@ RSpec.describe 'CreateOfficers', type: :request do
           ranks{
             id
             name
+          }
+          profile{
+            id
+            status
           }
         },
         errors{

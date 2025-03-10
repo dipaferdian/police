@@ -56,8 +56,15 @@ RSpec.describe Officer, type: :model do
     end
 
     it { should belong_to(:vehicle).optional(true) }
+
+    it { should belong_to(:profile).optional(true) }
+
     it 'should officer have vehicle' do
       expect(officer.vehicle).to be_present
+    end
+
+    it 'should officer have profile' do
+      expect(officer.profile).to be_present
     end
 
     it 'should not able to have vehicle already has by other officer' do
