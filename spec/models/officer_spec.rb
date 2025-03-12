@@ -59,6 +59,8 @@ RSpec.describe Officer, type: :model do
 
     it { should have_one(:profile) }
 
+    it { should have_one(:location_track) }
+
     it 'should officer have vehicle' do
       expect(officer.vehicle).to be_present
     end

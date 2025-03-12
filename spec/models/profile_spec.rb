@@ -12,9 +12,9 @@ RSpec.describe Profile, type: :model do
     it { should validate_inclusion_of(:status).in_array(%w[good warning danger]) }
   end
 
-  describe 'data' do
+  describe 'officer' do
 
-    it "should return default status good" do
+    it "should return default status officer is good" do
       expect(officer.reload.profile.status).to eq("good")
     end
   end

@@ -5,12 +5,13 @@ class Officer < ApplicationRecord
   belongs_to :office, optional: true
   belongs_to :vehicle, optional: true
   has_one    :profile
+  has_one    :location_track
 
   validates :name, uniqueness: true, presence: true, length: { maximum: 255 }
   validates :vehicle, uniqueness: true, allow_nil: true
   validates_associated :ranks
 
-  after_save :set_profile
+  after_save :set_profile, :set_location_track
 
   def self.save_officers(datas:)
 
@@ -51,6 +52,12 @@ class Officer < ApplicationRecord
   def set_profile
     unless self.profile.present?
       create_profile(status: "good")
+    end
+  end
+  
+  def set_location_track
+    unless self.location_track.present?
+      create_location_track()
     end
   end
 end

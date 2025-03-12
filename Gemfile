@@ -8,6 +8,7 @@ gem 'dotenv-rails'
 
 gem 'spring'
 
+# authenctication
 gem 'jwt'
 
 gem 'bcrypt', '~> 3.1.7'
