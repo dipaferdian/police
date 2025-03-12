@@ -13,7 +13,7 @@ module Queries
           officers = Officer.joins(:ranks)
 
           if name.present?
-            officers = officers.where(name: name)
+            officers = officers.where('officers.name ILIKE ?', "%#{name}%")
           end
 
           {

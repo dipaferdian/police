@@ -13,7 +13,7 @@ module Queries
           ranks = Rank.all
 
           if name.present?
-            ranks = ranks.where(name: name)
+            ranks = ranks.where('name ILIKE ?', "%#{name}%")
           end
 
           {

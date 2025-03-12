@@ -83,6 +83,34 @@ RSpec.describe 'GetOfficers', type: :request do
       expect(response.parsed_body["data"]["getOfficers"]["officers"].length).to eq(1)
     end
 
+    it 'should return officers search by name incase-sensitive' do
+      officers = create_list(:officer, 10) do |officer|
+                    officer.ranks << rank
+                end
+
+      officers.first.update(name: "Dipa Ferdian")
+
+      variables = { 
+        input: {
+          page: 1,
+          name: "dipa"
+        }
+      }
+
+      post '/graphql',
+      params: { query: query, variables: variables }.to_json, # Convert params to JSON
+      headers: header(user).merge!({ 'Content-Type' => 'application/json' }) # Set JSON headers
+
+      expect(response).to have_http_status(200)
+      expect(response.request.method).to eq("POST")
+      expect(response.parsed_body["errors"]).to be_nil
+      expect(response.parsed_body["data"]["getOfficers"]["officers"].length).to eq(1)
+      expect(response.parsed_body["data"]["getOfficers"]).to include("officers" => officer_data_type({
+        "id"   =>  officers.first.id,
+        "name" =>  officers.first.name
+      }))
+    end
+
     it 'should return unauthorized when user is not admin' do
       variables = { 
         input: {

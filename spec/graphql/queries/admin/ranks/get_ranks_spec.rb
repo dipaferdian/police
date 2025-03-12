@@ -62,6 +62,30 @@ RSpec.describe 'GetRanks', type: :request do
       }))
     end
 
+    it 'should search by name incase-sensitive' do
+      rank = create(:rank, name: 'Jendral')
+
+      variables = { 
+        input: {
+          page: 1,
+          name: "jendra"
+        }
+      }
+
+      post '/graphql',
+      params: { query: query, variables: variables }.to_json, # Convert params to JSON
+      headers: header(user).merge!({ 'Content-Type' => 'application/json' }) # Set JSON headers
+
+      expect(response).to have_http_status(200)
+      expect(response.request.method).to eq("POST")
+      expect(response.parsed_body["errors"]).to be_nil
+      expect(response.parsed_body["data"]["getRanks"]["ranks"].length).to eq(1) 
+      expect(response.parsed_body["data"]["getRanks"]).to include("ranks" => rank_data_type({
+        "id"   => rank.id,
+        "name" => rank.name
+      }))
+    end
+
     it 'should return empty search by name' do
       variables = { 
         input: {
