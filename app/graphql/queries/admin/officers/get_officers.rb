@@ -10,7 +10,7 @@ module Queries
         def resolve(page:, name:)
           authenticate_admin!
 
-          officers = Officer.includes(:ranks)
+          officers = Officer.joins(:ranks)
 
           if name.present?
             officers = officers.where(name: name)
