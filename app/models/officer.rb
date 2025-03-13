@@ -18,20 +18,36 @@ class Officer < ApplicationRecord
     new_officers = []
     Officer.transaction do
       new_officers = datas.map do |data|
+        is_update = data.key?(:id)
         name = data[:name]
         rank_id = data[:rank_id]
 
-        rank = Rank.find_by(id: rank_id)
-        officer = Officer.new(name: name)
+        unless is_update
+          officer = Officer.new(name: name)
 
-        unless rank
-          new_officers = [
-            "errors" => "Rank #{rank_id} not found"
-          ]
-          raise ActiveRecord::Rollback, "Rank #{rank_id} not found"
+          rank = Rank.find_by(id: rank_id)
+
+          unless rank
+            new_officers = [
+              "errors" => "Rank #{rank_id} not found"
+            ]
+            raise ActiveRecord::Rollback, "Rank #{rank_id} not found"
+          end
+  
+          officer.ranks << rank
+        else
+          officer = Officer.find_by(id: data[:id])
+
+          if officer
+            officer.name = name if name.present?
+          else
+            new_officers = [
+              "errors" => "Officer #{data[:id]} not found"
+            ]
+            raise ActiveRecord::Rollback, "Officer #{data[:id]} not found"
+          end
         end
 
-        officer.ranks << rank
         if officer.save
           officer
         else
@@ -45,7 +61,6 @@ class Officer < ApplicationRecord
 
     new_officers
   end
-
 
   private
 
