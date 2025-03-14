@@ -20,7 +20,7 @@ RSpec.describe 'LoginAuthentications', type: :request do
     it 'should success authentications' do
       variables = {
         input: {
-          users: {
+          authentication: {
             email: user.email,
             password: "password123"
           }
@@ -42,7 +42,7 @@ RSpec.describe 'LoginAuthentications', type: :request do
     it 'should failed authentications with wrong password' do
       variables = {
         input: {
-          users: {
+          authentication: {
             email: user.email,
             password: "test"
           }
@@ -60,7 +60,7 @@ RSpec.describe 'LoginAuthentications', type: :request do
     it 'should failed authentications with wrong email' do
       variables = {
         input: {
-          users: {
+          authentication: {
             email: "dipaferdian@gmail.com",
             password: "password123"
           }
@@ -79,7 +79,7 @@ RSpec.describe 'LoginAuthentications', type: :request do
     it 'should failed authentications with wrong email and password' do
       variables = {
         input: {
-          users: {
+          authentication: {
             email: "wrong@gmail.com",
             password: "wrong"
           }

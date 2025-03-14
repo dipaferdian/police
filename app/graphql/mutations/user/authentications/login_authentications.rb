@@ -6,13 +6,13 @@ module Mutations
       class LoginAuthentications < BaseQueriesMutation
         field :jwt, Types::AuthenticationType, null: false
         
-        argument :users, LoginAuthenticationsInputType, required: true
+        argument :authentication, LoginAuthenticationsInputType, required: true
         
-        def resolve(users:)
+        def resolve(authentication:)
 
-          user = ::User.find_by(email: users[:email])
+          user = ::User.find_by(email: authentication[:email])
 
-          return respond_single_error("Invalid credentials") unless user&.authenticate(users[:password])
+          return respond_single_error("Invalid credentials") unless user&.authenticate(authentication[:password])
 
           jwt = { token: JwtService.encode(email: user.email) }
 
