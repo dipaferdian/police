@@ -9,6 +9,7 @@ module Types
     field :login_authentications, mutation: Mutations::User::Authentications::LoginAuthentications, description: 'login authentications'
 
     # Rank
+    field :create_ranks, mutation: Mutations::Admin::Ranks::CreateRanks, description: 'create ranks'
     field :update_ranks, mutation: Mutations::Admin::Ranks::UpdateRanks, description: 'update ranks'
   end
 end

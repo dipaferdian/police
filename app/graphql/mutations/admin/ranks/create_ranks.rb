@@ -1,10 +1,10 @@
 module Mutations
   module Admin
     module Ranks
-      class UpdateRanks < BaseQueriesMutation
+      class CreateRanks < BaseQueriesMutation
         field :ranks, [Types::RankType], null: false
 
-        argument :ranks, [UpdateRanksInputType], required: true
+        argument :ranks, [CreateRanksInputType], required: true
 
         def resolve(ranks:)
           authenticate_admin!

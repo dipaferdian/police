@@ -54,7 +54,7 @@ class Officer < ApplicationRecord
           new_officers = [
             "errors" => "#{officer.errors.full_messages.join(', ')}"
           ]
-          raise ActiveRecord::Rollback, "Failed to create officer: #{officer.errors.full_messages.join(', ')}"
+          raise ActiveRecord::Rollback, "Failed to #{is_update ? "update" : "create"} officer: #{officer.errors.full_messages.join(', ')}"
         end
       end
     end

@@ -62,7 +62,6 @@ RSpec.describe 'UpdateOfficers', type: :request do
 
       post '/graphql', params: { query: query, variables: variables }, headers: header(user)
 
-      ap response.parsed_body
       expect(response).to have_http_status(200)
       expect(response.request.method).to eq("POST")
       expect(response.parsed_body["errors"]).to be_nil
